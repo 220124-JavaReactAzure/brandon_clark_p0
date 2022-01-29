@@ -88,7 +88,9 @@ public class OutputTester extends JPanel implements ActionListener {
         register.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	JOptionPane.showMessageDialog(null, "register");
+            	RegisterPage newUser = new RegisterPage();
+            	theFrame.dispose();
+            	//JOptionPane.showMessageDialog(null, "register");
             }
         });
         

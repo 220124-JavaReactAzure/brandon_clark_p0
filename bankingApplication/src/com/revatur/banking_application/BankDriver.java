@@ -9,7 +9,7 @@ import com.revatur.banking_application.OutputTester;
 
 public class BankDriver {
 	
-	static BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+	//static BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
 
 	public static void main(String[] args) {
 		
