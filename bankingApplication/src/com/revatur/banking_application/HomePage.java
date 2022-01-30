@@ -18,7 +18,6 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import com.revatur.banking_application.BankDriver;
-import com.revatur.banking_application.OutputTester;
 
 public class HomePage {
 	
@@ -26,12 +25,10 @@ public class HomePage {
 	
 	public HomePage() {
 		
-		//System.out.println("Welcome to Silver Banking");
-		//OutputTester.HomeCall();
-		final JFrame theFrame = new JFrame();
-        theFrame.setTitle("Silver Banking");
-        theFrame.setSize(500, 500);
-        theFrame.setLocation(550, 400);
+		final JFrame loginFrame = new JFrame();
+        loginFrame.setTitle("Silver Banking");
+        loginFrame.setSize(500, 500);
+        loginFrame.setLocation(550, 400);
 		
 		JPanel gui = new JPanel(new GridLayout(0,2,1,10));
         
@@ -55,7 +52,7 @@ public class HomePage {
         enterPassword.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	theFrame.dispose();
+            	loginFrame.dispose();
             }
         });
         
@@ -66,7 +63,7 @@ public class HomePage {
             public void actionPerformed(ActionEvent e) {
             	
             	RegisterPage newUser = new RegisterPage();
-            	theFrame.dispose();
+            	loginFrame.dispose();
             	//JOptionPane.showMessageDialog(null, "register");
             }
         });
@@ -85,14 +82,14 @@ public class HomePage {
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	theFrame.dispose();
+            	loginFrame.dispose();
             }
         });
         
         
-        theFrame.add(gui);
-        theFrame.pack();
-        theFrame.setVisible(true);
+        loginFrame.add(gui);
+        loginFrame.pack();
+        loginFrame.setVisible(true);
 		
 		
 		

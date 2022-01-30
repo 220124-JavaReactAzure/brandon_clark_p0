@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import com.revatur.banking_application.HomePage;
-import com.revatur.banking_application.OutputTester;
 
 public class BankDriver {
 	
@@ -13,7 +12,7 @@ public class BankDriver {
 
 	public static void main(String[] args) {
 		
-		HomePage hp = new HomePage();
+		HomePage programStart = new HomePage();
 		
 		
 //		ArrayList<String> listToSend = new ArrayList<String>();

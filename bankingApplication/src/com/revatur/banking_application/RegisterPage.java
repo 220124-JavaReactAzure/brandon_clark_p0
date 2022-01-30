@@ -4,6 +4,9 @@ import java.awt.Button;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -14,13 +17,15 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import com.revatur.banking_application.models.BankUser;
+
 public class RegisterPage {
 		public RegisterPage() {
 			
-			final JFrame theFrame = new JFrame();
-	        theFrame.setTitle("Silver Banking");
-	        theFrame.setSize(500, 500);
-	        theFrame.setLocation(550, 400);
+			final JFrame registrationFrame = new JFrame();
+	        registrationFrame.setTitle("Silver Banking");
+	        registrationFrame.setSize(500, 500);
+	        registrationFrame.setLocation(550, 400);
 	        
 	        JPanel gui = new JPanel(new GridLayout(0,2,1,10));
 	        
@@ -41,6 +46,13 @@ public class RegisterPage {
 	        JTextField enterLastName = new JTextField(null, 20);
 	        enterLastName.setBorder(null);
 	        gui.add(enterLastName);
+	        
+	        JLabel email = new JLabel("Email Address: ");
+	        gui.add(email);
+	        
+	        JTextField enterEmail = new JTextField(null, 20);
+	        enterEmail.setBorder(null);
+	        gui.add(enterEmail);
 	        
 	        JLabel username = new JLabel("Username: ");
 	        gui.add(username);
@@ -70,7 +82,7 @@ public class RegisterPage {
 	            public void actionPerformed(ActionEvent e) {
 	            	
 	            	HomePage hp = new HomePage();
-	            	theFrame.dispose();
+	            	registrationFrame.dispose();
 	            	//JOptionPane.showMessageDialog(null, "register");
 	            }
 	        });
@@ -81,35 +93,92 @@ public class RegisterPage {
 				@SuppressWarnings("deprecation")
 				@Override
 	            public void actionPerformed(ActionEvent e) {
-	            	if(enterPassword.getText().equals(enterConfirmPassword.getText())) {
-	            		if (enterPassword.getText().trim().isEmpty() || 
-	            			enterConfirmPassword.getText().trim().isEmpty() || 
-	            			enterUsername.getText().trim().isEmpty() || 
-	            			enterLastName.getText().trim().isEmpty() ||
-	            			enterFirstName.getText().trim().isEmpty()) {
-	            			
-	            			JOptionPane.showMessageDialog(null,"Please Fill Out All Information");
-	            		}else {
-	            			JOptionPane.showMessageDialog(null,"Account Confirmed");
-	            			HomePage hp = new HomePage();
-	            			theFrame.dispose();
-	            		}
-	            		
-	            	} else {
-	            		JOptionPane.showMessageDialog(null,"Please Enter Matching Passwords");
+					if (enterPassword.getText().trim().isEmpty() || 
+	            		enterConfirmPassword.getText().trim().isEmpty() || 
+	            		enterUsername.getText().trim().isEmpty() || 
+	            		enterLastName.getText().trim().isEmpty() ||
+	            		enterFirstName.getText().trim().isEmpty() ||
+	            		enterEmail.getText().trim().isEmpty()) {
+						JOptionPane.showMessageDialog(null,"Please fill out all information fields.");
+					} else if(Character.isLowerCase(enterFirstName.getText().charAt(0))) {
+						JOptionPane.showMessageDialog(null,"Please have the first letter of your first name capitalized.");
+					} else if (Character.isLowerCase(enterLastName.getText().charAt(0))){
+						JOptionPane.showMessageDialog(null,"Please have the first letter of your last name capitalized.");
+					} else if (!(enterEmail.getText().contains("@") || !(enterEmail.getText().contains(".com") || enterEmail.getText().contains(".net") || enterEmail.getText().contains(".org")))){
+						JOptionPane.showMessageDialog(null,"Please make sure the email address is valid.");
+					} else if(!(enterPassword.getText().equals(enterConfirmPassword.getText()))) {
+						JOptionPane.showMessageDialog(null,"Please enter matching passwords.");
+					} else {
+						BankUser newBankUser = new BankUser(enterUsername.getText().trim(),
+															enterFirstName.getText().trim(),
+															enterLastName.getText().trim(),
+															enterEmail.getText().trim(),
+															enterPassword.getText());
+						File bankUserPersistance = new File("C:\\Users\\silve\\Desktop\\coding stuff\\brandon_clark_p0\\bankingApplication\\src\\com\\revatur\\banking_application\\resources\\data.txt");
+						try(FileWriter fileWriter = new FileWriter(bankUserPersistance, true); ){
+							System.out.println(newBankUser.toFileString());
+							fileWriter.append(newBankUser.toFileString() + "\n");
+							fileWriter.flush();
+							fileWriter.close();
+						} catch (IOException exception) {
+							exception.printStackTrace();
+						}
+						
+	            		EmailVerification(enterEmail.getText());
+	            		registrationFrame.dispose();
 	            	}
-	            	
-	            	
-	            	
 	            }
 	        });
 	        
-	        
-	        
-	        
-	        
-	        theFrame.add(gui);
-	        theFrame.pack();
-	        theFrame.setVisible(true);
+	        registrationFrame.add(gui);
+	        registrationFrame.pack();
+	        registrationFrame.setVisible(true);
 		}
+		
+		public void EmailVerification(String email) {
+			
+			final JFrame verificationFrame = new JFrame();
+	        verificationFrame.setTitle("Silver Banking");
+	        verificationFrame.setSize(500, 500);
+	        verificationFrame.setLocation(550, 400);
+	        
+	        JPanel gui = new JPanel(new GridLayout(0,2,1,10));
+	        
+	        String title = "Verify Email";
+	        Border border = BorderFactory.createTitledBorder(title);
+	        gui.setBorder(border);
+	        
+	        
+	        JLabel verificationMessage = new JLabel("Please verify your email at " + email.trim() + ":");
+	        gui.add(verificationMessage);
+	        
+	        Button verify = new Button("Verify");
+	        gui.add(verify);
+	        verify.addActionListener(new ActionListener() {
+				@Override
+	            public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null,"Account Confirmed");
+					HomePage homeReturn = new HomePage();
+					verificationFrame.dispose();
+				}
+	        });
+	        
+	        Button returnToRegister = new Button("Return");
+	        gui.add(returnToRegister);
+	        returnToRegister.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	            	
+	            	RegisterPage restartRegister = new RegisterPage();
+	            	verificationFrame.dispose();
+	            	
+	            }
+	        });
+
+			
+			verificationFrame.add(gui);
+	        verificationFrame.pack();
+	        verificationFrame.setVisible(true);
+		}
+		
 }
