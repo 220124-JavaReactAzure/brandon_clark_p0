@@ -7,10 +7,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -26,19 +22,6 @@ import com.revature.banking_application.models.UserNodes;
 
 public class RegisterPage {
 		public RegisterPage(UserNodes userList) {
-			
-//			Path dataPath = Paths.get("C:\\Users\\silve\\Desktop\\coding stuff\\brandon_clark_p0\\bankingApplication\\src\\com\\revature\\banking_application\\resources\\data.txt");
-//			List<String> fileData;
-//			try {
-//				fileData = Files.readAllLines(dataPath);
-//				for(int i=0;i<fileData.size();i++){
-//					System.out.println(fileData.get(i));
-//				}
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-			
 			
 			final JFrame registrationFrame = new JFrame();
 	        registrationFrame.setTitle("Silver Banking");
@@ -99,9 +82,8 @@ public class RegisterPage {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	            	
-	            	HomePage hp = new HomePage(userList);
+	            	new HomePage(userList);
 	            	registrationFrame.dispose();
-	            	//JOptionPane.showMessageDialog(null, "register");
 	            }
 	        });
 	        
@@ -141,7 +123,7 @@ public class RegisterPage {
 						newBankUser.addToList(newBankUser);
 						File bankUserPersistance = new File("C:\\Users\\silve\\Desktop\\coding stuff\\brandon_clark_p0\\bankingApplication\\src\\com\\revature\\banking_application\\resources\\data.txt");
 						try(FileWriter fileWriter = new FileWriter(bankUserPersistance, true); ){
-							System.out.println(newBankUser.toFileString());
+							//System.out.println(newBankUser.toFileString());
 							fileWriter.append(newBankUser.toFileString() + "\n");
 							fileWriter.flush();
 							fileWriter.close();
@@ -183,7 +165,7 @@ public class RegisterPage {
 				@Override
 	            public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null,"Account Confirmed");
-					HomePage homeReturn = new HomePage(userList);
+					new HomePage(userList);
 					verificationFrame.dispose();
 				}
 	        });
@@ -194,7 +176,7 @@ public class RegisterPage {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	            	
-	            	RegisterPage restartRegister = new RegisterPage(userList);
+	            	new RegisterPage(userList);
 	            	verificationFrame.dispose();
 	            	
 	            }

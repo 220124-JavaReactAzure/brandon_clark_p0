@@ -6,8 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import com.revature.banking_application.models.UserNodes;
-
 public class BankUser {
 	static UserNodes userList = new UserNodes();
 	private String username;
@@ -59,6 +57,10 @@ public class BankUser {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 
 	public void setPassword(String password) {

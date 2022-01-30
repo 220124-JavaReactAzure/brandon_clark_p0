@@ -4,9 +4,6 @@ import java.awt.Button;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -17,12 +14,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import com.revature.banking_application.BankDriver;
 import com.revature.banking_application.models.UserNodes;
 
 public class HomePage {
-	
-	//static BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
 	
 	public HomePage(UserNodes userList) {
 		
@@ -63,9 +57,8 @@ public class HomePage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	RegisterPage newUser = new RegisterPage(userList);
+            	new RegisterPage(userList);
             	loginFrame.dispose();
-            	//JOptionPane.showMessageDialog(null, "register");
             }
         });
         
@@ -74,7 +67,8 @@ public class HomePage {
         passReset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	JOptionPane.showMessageDialog(null, "reset");
+            	new PasswordReset(userList);
+            	loginFrame.dispose();
             }
         });
         
