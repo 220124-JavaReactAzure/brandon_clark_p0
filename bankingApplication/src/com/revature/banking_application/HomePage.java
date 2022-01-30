@@ -1,4 +1,4 @@
-package com.revatur.banking_application;
+package com.revature.banking_application;
 
 import java.awt.Button;
 import java.awt.GridLayout;
@@ -17,13 +17,14 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import com.revatur.banking_application.BankDriver;
+import com.revature.banking_application.BankDriver;
+import com.revature.banking_application.models.UserNodes;
 
 public class HomePage {
 	
 	//static BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
 	
-	public HomePage() {
+	public HomePage(UserNodes userList) {
 		
 		final JFrame loginFrame = new JFrame();
         loginFrame.setTitle("Silver Banking");
@@ -62,7 +63,7 @@ public class HomePage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	RegisterPage newUser = new RegisterPage();
+            	RegisterPage newUser = new RegisterPage(userList);
             	loginFrame.dispose();
             	//JOptionPane.showMessageDialog(null, "register");
             }
