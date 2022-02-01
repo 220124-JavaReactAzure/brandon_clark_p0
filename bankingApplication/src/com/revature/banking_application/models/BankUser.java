@@ -83,9 +83,6 @@ public class BankUser {
 		userList.addNode(userToInput);
 	}
 	
-	
-	
-	
 	public static UserNodes initialList(){
 		Path dataPath = Paths.get("C:\\Users\\silve\\Desktop\\coding stuff\\brandon_clark_p0\\bankingApplication\\src\\com\\revature\\banking_application\\resources\\data.txt");
 		List<String> fileData;

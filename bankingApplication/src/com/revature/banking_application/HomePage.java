@@ -14,6 +14,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.models.UserNodes;
 
 public class HomePage {
@@ -34,22 +35,16 @@ public class HomePage {
         JLabel username = new JLabel("Username: ");
         gui.add(username);
         
-        JTextField enterName = new JTextField("", 20);
-        enterName.setBorder(null);
-        gui.add(enterName);
+        JTextField enterUsername = new JTextField("", 20);
+        enterUsername.setBorder(null);
+        gui.add(enterUsername);
         
         JLabel password = new JLabel("Password: ");
         gui.add(password);
         
         JPasswordField enterPassword = new JPasswordField("", 20);
-        enterName.setBorder(null);
+        enterPassword.setBorder(null);
         gui.add(enterPassword);
-        enterPassword.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	loginFrame.dispose();
-            }
-        });
         
         Button register = new Button("Register");
         gui.add(register);
@@ -58,6 +53,41 @@ public class HomePage {
             public void actionPerformed(ActionEvent e) {
             	
             	new RegisterPage(userList);
+            	loginFrame.dispose();
+            }
+        });
+        
+        Button submit = new Button("Submit");
+        gui.add(submit);
+        submit.addActionListener(new ActionListener() {
+            @SuppressWarnings("deprecation")
+			@Override
+            public void actionPerformed(ActionEvent e) {
+            	if (enterPassword.getText().trim().isEmpty() || 
+	            	enterUsername.getText().trim().isEmpty()) {
+            		JOptionPane.showMessageDialog(null,"Please fill out all information fields.");
+            	} else if(userList.unusedUserName(enterUsername.getText().trim())) {
+            		BankUser returningUser = userList.returnBankUser(enterUsername.getText().trim());
+            		if(returningUser.getPassword().equals(enterPassword.getText())) {
+            			new UserPage(userList, returningUser);
+            			loginFrame.dispose();
+            		} else {
+                		JOptionPane.showMessageDialog(null,"Username or email is incorrect.");
+            		}
+            	} else {
+            		JOptionPane.showMessageDialog(null,"Username or email is incorrect.");
+            	}
+            	
+            	
+            	
+            }
+        });
+        
+        Button exit = new Button("Exit"); 
+        gui.add(exit);
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
             	loginFrame.dispose();
             }
         });
@@ -72,21 +102,9 @@ public class HomePage {
             }
         });
         
-        Button exit = new Button("Exit"); 
-        gui.add(exit);
-        exit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	loginFrame.dispose();
-            }
-        });
-        
-        
         loginFrame.add(gui);
         loginFrame.pack();
-        loginFrame.setVisible(true);
-		
-		
+        loginFrame.setVisible(true);	
 		
 	}
 	
