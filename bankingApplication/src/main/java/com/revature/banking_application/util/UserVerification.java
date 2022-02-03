@@ -1,5 +1,7 @@
 package com.revature.banking_application.util;
 
+import com.revature.banking_application.models.BankUser;
+
 public class UserVerification {
 	public static Boolean CheckExistingUsername(String userInput) {
 		String existingUser = DatabaseAccess.SearchUsername(userInput);
@@ -12,6 +14,14 @@ public class UserVerification {
 	public static Boolean CheckExistingEmail(String userInput) {
 		String existingEmail = DatabaseAccess.SearchEmail(userInput);
 		if(existingEmail != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static Boolean CheckExistingEmail(String userInput, BankUser currentUser) {
+		String existingEmail = DatabaseAccess.SearchEmail(userInput);
+		if(existingEmail != null && !(existingEmail.trim().equals(currentUser.getEmail().trim()))) {
 			return true;
 		}
 		return false;
@@ -35,5 +45,14 @@ public class UserVerification {
 			return true;
 		}
 	return false;
+	}
+	
+	public static Boolean CheckNumeric(String userInput) {
+		for(int i = 0; i<userInput.length(); i++) {
+			if(!(Character.isDigit(userInput.charAt(i)))){
+				return true;
+			}
+		}
+		return false;
 	}
 }

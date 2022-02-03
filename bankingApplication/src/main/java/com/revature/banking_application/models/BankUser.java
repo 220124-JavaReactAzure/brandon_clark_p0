@@ -3,12 +3,12 @@ package com.revature.banking_application.models;
 
 public class BankUser {
 	static UserNodes userList = new UserNodes();
+	private int userID;
 	private String username;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String password;
-	private int userID;
 	private String social;
 	private String address;
 	private String city;
@@ -26,6 +26,32 @@ public class BankUser {
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
+	}
+
+	public BankUser(int userID, String username, String firstName, String lastName, String email, String password) {
+		super();
+		this.userID = userID;
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+	}
+
+	public BankUser(int userID, String username, String firstName, String lastName, String email, String password, 
+			String social, String address, String city, String state, String zipCode) {
+		super();
+		this.userID = userID;
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.social = social;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.zipCode = zipCode;
 	}
 
 	public String getUsername() {

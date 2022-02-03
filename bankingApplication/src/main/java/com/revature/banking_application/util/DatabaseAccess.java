@@ -137,12 +137,39 @@ public class DatabaseAccess {
 			String sql = ("select * from userinfo where user_login_name = '"+searchValue+"'");
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
-			while(rs.next()) {
-				returnUser = new BankUser(rs.getString("user_login_name"), 
+			String social = "";
+			String address = "";
+			String city = "";
+			String state = "";
+			String zip = "";
+ 			while(rs.next()) {
+				if(rs.getString("user_social") != null) {
+					social = rs.getString("user_social");					 
+				}
+				if(rs.getString("user_address") != null) {
+					address = rs.getString("user_address");
+				}
+				if(rs.getString("user_city") != null) {
+					city = rs.getString("user_city");
+				}
+				if(rs.getString("user_state") != null) {
+					state = rs.getString("user_state");
+				}
+				if(rs.getString("user_zip_code") != null) {
+					zip = rs.getString("user_zip_code");
+				}
+				returnUser = new BankUser(rs.getInt("user_id"),
+										  rs.getString("user_login_name"), 
 										  rs.getString("user_first_name"),
 										  rs.getString("user_last_name"),
 										  rs.getString("user_email"),
-										  rs.getString("user_password"));
+										  rs.getString("user_password"),
+										  social,
+										  address,
+										  city,
+										  state,
+										  zip);
+											
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -179,6 +206,54 @@ public class DatabaseAccess {
 
 			ps.setString(1, bankUserToChange.getPassword());
 			ps.setString(2, bankUserToChange.getUsername());
+			
+			int executed = ps.executeUpdate();
+			if(executed !=0) {
+				returnValue = true;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+		}
+		return returnValue;
+	}
+
+	public static Boolean UpdateUser(BankUser updateUser) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean returnValue = false;
+	
+		try {
+			conn = ConnectionFactory.getInstance().getConnection();
+			String sql = ("update userinfo set user_first_name = ?, user_last_name = ?, user_email = ?, user_social = ?, user_address = ?, user_city = ?, user_state = ?, user_zip_code = ? where user_id = ?");
+			ps = conn.prepareStatement(sql);
+
+			
+			ps.setString(1, updateUser.getFirstName());
+			ps.setString(2, updateUser.getLastName());
+			ps.setString(3, updateUser.getEmail());
+			ps.setString(4, updateUser.getSocial());
+			ps.setString(5, updateUser.getAddress());
+			ps.setString(6, updateUser.getCity());
+			ps.setString(7, updateUser.getState());
+			ps.setString(8, updateUser.getZipCode());
+			ps.setInt(9, updateUser.getUserID());
 			
 			int executed = ps.executeUpdate();
 			if(executed !=0) {
