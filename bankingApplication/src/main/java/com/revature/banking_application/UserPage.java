@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import com.revature.banking_application.models.BankUser;
-import com.revature.banking_application.models.UserNodes;
 
 public class UserPage {
 	
@@ -28,79 +27,79 @@ public class UserPage {
         Border border = BorderFactory.createTitledBorder(title);
         gui.setBorder(border);
         
-        Button button1 = new Button("Button1");
-        gui.add(button1);
-        button1.addActionListener(new ActionListener() {
+        Button viewAccountBalance = new Button("View Account Balances");
+        gui.add(viewAccountBalance);
+        viewAccountBalance.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage();
+            	new ViewAccountBalancePage();
             	mainUserFrame.dispose();
             }
         });
         
-        Button button2 = new Button("Button2");
-        gui.add(button2);
-        button2.addActionListener(new ActionListener() {
+        Button viewTransactions = new Button("View Transactions");
+        gui.add(viewTransactions);
+        viewTransactions.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage();
+            	new ViewTransactionsPage();
             	mainUserFrame.dispose();
             }
         });
         
-        Button button3 = new Button("Button3");
-        gui.add(button3);
-        button3.addActionListener(new ActionListener() {
+        Button requestJointAccount = new Button("Request Joint Account");
+        gui.add(requestJointAccount);
+        requestJointAccount.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage();
+            	new RequestJointAccountPage();
             	mainUserFrame.dispose();
             }
         });
         
-        Button button4 = new Button("Button4");
-        gui.add(button4);
-        button4.addActionListener(new ActionListener() {
+        Button depositFunds = new Button("Deposit Funds");
+        gui.add(depositFunds);
+        depositFunds.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage();
+            	new DepositFundsPage();
             	mainUserFrame.dispose();
             }
         });
         
-        Button button5 = new Button("Button5");
-        gui.add(button5);
-        button5.addActionListener(new ActionListener() {
+        Button withdrawFunds = new Button("Withdraw Funds");
+        gui.add(withdrawFunds);
+        withdrawFunds.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage();
+            	new WithdrawFundsPage();
             	mainUserFrame.dispose();
             }
         });
         
-        Button button6 = new Button("Button6");
-        gui.add(button6);
-        button6.addActionListener(new ActionListener() {
+        Button transferFunds = new Button("Transfer Funds");
+        gui.add(transferFunds);
+        transferFunds.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage();
+            	new TransferFundsPage();
             	mainUserFrame.dispose();
             }
         });
         
-        Button button7 = new Button("Button7");
-        gui.add(button7);
-        button7.addActionListener(new ActionListener() {
+        Button createNewAccount = new Button("Create New Account");
+        gui.add(createNewAccount);
+        createNewAccount.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage();
+            	new CreateNewAccountPage();
             	mainUserFrame.dispose();
             }
         });
@@ -111,7 +110,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage();
+            	new UserSettingsPage(currentUser);
             	mainUserFrame.dispose();
             }
         });

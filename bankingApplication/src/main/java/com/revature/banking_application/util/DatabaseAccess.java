@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.revature.banking_application.util.ConnectionFactory;
 import com.revature.banking_application.models.BankUser;
 
 public class DatabaseAccess {
@@ -18,9 +17,9 @@ public class DatabaseAccess {
 	
 		try {
 			conn = ConnectionFactory.getInstance().getConnection();
-			String sql = ("select * from userinfo where user_login_name = ?");
+			String sql = ("select * from userinfo where user_login_name = '"+searchValue+"'");
 			ps = conn.prepareStatement(sql);
-			ps.setString(1, searchValue);
+			//ps.setString(1, searchValue);
 			rs = ps.executeQuery();
 			while(rs.next()) {
 				returnValue = rs.getString("user_login_name");
@@ -55,8 +54,9 @@ public class DatabaseAccess {
 	
 		try {
 			conn = ConnectionFactory.getInstance().getConnection();
-			String sql = ("select user_email from userinfo where user_email = " + searchValue);
+			String sql = ("select * from userinfo where user_email = '"+searchValue+"'");
 			ps = conn.prepareStatement(sql);
+			//ps.setString(1, searchValue);
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {
@@ -134,7 +134,7 @@ public class DatabaseAccess {
 	
 		try {
 			conn = ConnectionFactory.getInstance().getConnection();
-			String sql = ("select * from userinfo where user_login_name = " + searchValue);
+			String sql = ("select * from userinfo where user_login_name = '"+searchValue+"'");
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 			while(rs.next()) {

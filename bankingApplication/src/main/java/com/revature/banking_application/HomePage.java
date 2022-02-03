@@ -15,7 +15,6 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import com.revature.banking_application.models.BankUser;
-import com.revature.banking_application.models.UserNodes;
 import com.revature.banking_application.util.DatabaseAccess;
 import com.revature.banking_application.util.UserVerification;
 
