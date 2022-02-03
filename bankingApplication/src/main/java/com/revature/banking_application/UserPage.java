@@ -15,7 +15,7 @@ import com.revature.banking_application.models.UserNodes;
 
 public class UserPage {
 	
-	public UserPage(UserNodes userList, BankUser currentUser) {
+	public UserPage(BankUser currentUser) {
 		
 		final JFrame mainUserFrame = new JFrame();
         mainUserFrame.setTitle("Silver Banking");
@@ -34,7 +34,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage(userList);
+            	new HomePage();
             	mainUserFrame.dispose();
             }
         });
@@ -45,7 +45,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage(userList);
+            	new HomePage();
             	mainUserFrame.dispose();
             }
         });
@@ -56,7 +56,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage(userList);
+            	new HomePage();
             	mainUserFrame.dispose();
             }
         });
@@ -67,7 +67,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage(userList);
+            	new HomePage();
             	mainUserFrame.dispose();
             }
         });
@@ -78,7 +78,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage(userList);
+            	new HomePage();
             	mainUserFrame.dispose();
             }
         });
@@ -89,7 +89,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage(userList);
+            	new HomePage();
             	mainUserFrame.dispose();
             }
         });
@@ -100,7 +100,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage(userList);
+            	new HomePage();
             	mainUserFrame.dispose();
             }
         });
@@ -111,7 +111,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage(userList);
+            	new HomePage();
             	mainUserFrame.dispose();
             }
         });
@@ -122,7 +122,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage(userList);
+            	new HomePage();
             	mainUserFrame.dispose();
             }
         });

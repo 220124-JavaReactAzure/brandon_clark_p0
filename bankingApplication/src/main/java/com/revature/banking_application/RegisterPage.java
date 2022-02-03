@@ -19,9 +19,11 @@ import javax.swing.border.Border;
 
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.models.UserNodes;
+import com.revature.banking_application.util.DatabaseAccess;
+import com.revature.banking_application.util.UserVerification;
 
 public class RegisterPage {
-		public RegisterPage(UserNodes userList) {
+		public RegisterPage() {
 			
 			final JFrame registrationFrame = new JFrame();
 	        registrationFrame.setTitle("Silver Banking");
@@ -82,7 +84,7 @@ public class RegisterPage {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	            	
-	            	new HomePage(userList);
+	            	new HomePage();
 	            	registrationFrame.dispose();
 	            }
 	        });
@@ -100,38 +102,40 @@ public class RegisterPage {
 	            		enterFirstName.getText().trim().isEmpty() ||
 	            		enterEmail.getText().trim().isEmpty()) {
 						JOptionPane.showMessageDialog(null,"Please fill out all information fields.");
-					} else if(Character.isLowerCase(enterFirstName.getText().charAt(0))) {
+					} 
+					
+					else if(UserVerification.CheckCapitalization(enterFirstName.getText())) {
 						JOptionPane.showMessageDialog(null,"Please have the first letter of your first name capitalized.");
-					} else if (Character.isLowerCase(enterLastName.getText().charAt(0))){
+					} 
+					
+					else if (UserVerification.CheckCapitalization(enterLastName.getText())){
 						JOptionPane.showMessageDialog(null,"Please have the first letter of your last name capitalized.");
-					} else if (!(enterEmail.getText().contains("@"))){
+					} 
+					
+					else if (UserVerification.CheckEmailContains(enterEmail.getText())){
 						JOptionPane.showMessageDialog(null,"Please make sure the email address is valid.");
-					} else if(!(enterEmail.getText().contains(".com") || enterEmail.getText().contains(".net") || enterEmail.getText().contains(".org"))) {
-						JOptionPane.showMessageDialog(null,"Please make sure the email address is valid.");
-				    } else if(!(enterPassword.getText().equals(enterConfirmPassword.getText()))) {
+					} 
+					
+					else if(!(enterPassword.getText().equals(enterConfirmPassword.getText()))) {
 						JOptionPane.showMessageDialog(null,"Please enter matching passwords.");
-					} else if(userList.unusedUserName(enterUsername.getText().trim())) {
+					} 
+					
+					else if(UserVerification.CheckExistingUsername(enterUsername.getText().trim())) {
 						JOptionPane.showMessageDialog(null,"Username already exists.");
-					} else if(userList.unusedEmail(enterEmail.getText().trim())) {
+					} 
+					
+					else if(UserVerification.CheckExistingEmail(enterEmail.getText().trim())) {
 						JOptionPane.showMessageDialog(null,"Email already exists.");
-					} else {
+					} 
+					
+					else {
 						BankUser newBankUser = new BankUser(enterUsername.getText().trim(),
 															enterFirstName.getText().trim(),
 															enterLastName.getText().trim(),
 															enterEmail.getText().trim(),
 															enterPassword.getText());
-						newBankUser.addToList(newBankUser);
-						File bankUserPersistance = new File("C:\\Users\\silve\\Desktop\\coding stuff\\brandon_clark_p0\\bankingApplication\\src\\com\\revature\\banking_application\\resources\\data.txt");
-						try(FileWriter fileWriter = new FileWriter(bankUserPersistance, true); ){
-							//System.out.println(newBankUser.toFileString());
-							fileWriter.append(newBankUser.toFileString() + "\n");
-							fileWriter.flush();
-							fileWriter.close();
-						} catch (IOException exception) {
-							exception.printStackTrace();
-						}
-						
-	            		EmailVerification(userList, enterEmail.getText());
+						DatabaseAccess.CreateUser(newBankUser);
+	            		EmailVerification(enterEmail.getText());
 	            		registrationFrame.dispose();
 	            	}
 	            }
@@ -142,7 +146,7 @@ public class RegisterPage {
 	        registrationFrame.setVisible(true);
 		}
 		
-		public void EmailVerification(UserNodes userList, String email) {
+		public void EmailVerification(String email) {
 			
 			final JFrame verificationFrame = new JFrame();
 	        verificationFrame.setTitle("Silver Banking");
@@ -165,7 +169,7 @@ public class RegisterPage {
 				@Override
 	            public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null,"Account Confirmed");
-					new HomePage(userList);
+					new HomePage();
 					verificationFrame.dispose();
 				}
 	        });
@@ -176,7 +180,7 @@ public class RegisterPage {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	            	
-	            	new RegisterPage(userList);
+	            	new RegisterPage();
 	            	verificationFrame.dispose();
 	            	
 	            }

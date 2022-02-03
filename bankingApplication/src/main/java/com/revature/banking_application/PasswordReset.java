@@ -23,9 +23,11 @@ import javax.swing.border.Border;
 
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.models.UserNodes;
+import com.revature.banking_application.util.DatabaseAccess;
+import com.revature.banking_application.util.UserVerification;
 
 public class PasswordReset {
-	public PasswordReset(UserNodes userList) {
+	public PasswordReset() {
 		
 		final JFrame verifyUsernameFrame = new JFrame();
         verifyUsernameFrame.setTitle("Silver Banking");
@@ -51,7 +53,7 @@ public class PasswordReset {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new HomePage(userList);
+            	new HomePage();
             	verifyUsernameFrame.dispose();
             }
         });
@@ -64,12 +66,12 @@ public class PasswordReset {
             	if (enterUsername.getText().trim().isEmpty()) {
 					JOptionPane.showMessageDialog(null,"Please fill out all information fields.");
 				} else {
-					if(userList.unusedUserName(enterUsername.getText().trim())) {
-						BankUser userToReset = userList.returnBankUser(enterUsername.getText().trim());
-						confirmEmail(userList, userToReset);
+					if(UserVerification.CheckExistingUsername(enterUsername.getText().trim())) {
+						BankUser userToReset = DatabaseAccess.PullUserFromUsername(enterUsername.getText().trim());
+						confirmEmail(userToReset);
 						verifyUsernameFrame.dispose();
 					} else {
-						notValidUser(userList);
+						notValidUser();
 						verifyUsernameFrame.dispose();
 					}
 				}	
@@ -83,7 +85,7 @@ public class PasswordReset {
         
 	}
 	
-	public void notValidUser(UserNodes userList) {
+	public void notValidUser() {
 		final JFrame invalidUserFrame = new JFrame();
         invalidUserFrame.setTitle("Silver Banking");
         invalidUserFrame.setSize(500, 500);
@@ -108,7 +110,7 @@ public class PasswordReset {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new PasswordReset(userList);
+            	new PasswordReset();
             	invalidUserFrame.dispose();
             }
         });
@@ -120,13 +122,11 @@ public class PasswordReset {
             public void actionPerformed(ActionEvent e) {
             	if (enterEmail.getText().trim().isEmpty()) {
 					JOptionPane.showMessageDialog(null,"Please fill out all information fields.");
-				} else if (!(enterEmail.getText().contains("@"))){
+				} else if (UserVerification.CheckEmailContains(enterEmail.getText())){
 					JOptionPane.showMessageDialog(null,"Please make sure the email address is valid.");
-				} else if(!(enterEmail.getText().contains(".com") || enterEmail.getText().contains(".net") || enterEmail.getText().contains(".org"))) {
-					JOptionPane.showMessageDialog(null,"Please make sure the email address is valid.");
-			    } else {
+				} else {
 			    	JOptionPane.showMessageDialog(null,"Username or email is incorrect.");
-			    	new PasswordReset(userList);
+			    	new PasswordReset();
 			    	invalidUserFrame.dispose();
 			    }
             }
@@ -137,7 +137,7 @@ public class PasswordReset {
         invalidUserFrame.setVisible(true);
 	}
 	
-	public void confirmEmail(UserNodes userList, BankUser bankUser) {
+	public void confirmEmail(BankUser bankUser) {
 		
 		final JFrame confirmEmailFrame = new JFrame();
         confirmEmailFrame.setTitle("Silver Banking");
@@ -163,7 +163,7 @@ public class PasswordReset {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new PasswordReset(userList);
+            	new PasswordReset();
             	confirmEmailFrame.dispose();
             }
         });
@@ -175,17 +175,15 @@ public class PasswordReset {
             public void actionPerformed(ActionEvent e) {
             	if (enterEmail.getText().trim().isEmpty()) {
 					JOptionPane.showMessageDialog(null,"Please fill out all information fields.");
-				} else if (!(enterEmail.getText().contains("@"))){
+				} else if (UserVerification.CheckEmailContains(enterEmail.getText())){
 					JOptionPane.showMessageDialog(null,"Please make sure the email address is valid.");
-				} else if(!(enterEmail.getText().contains(".com") || enterEmail.getText().contains(".net") || enterEmail.getText().contains(".org"))) {
-					JOptionPane.showMessageDialog(null,"Please make sure the email address is valid.");
-			    } else {
+				} else {
 			    	if(bankUser.getEmail().equalsIgnoreCase(enterEmail.getText())) {
-			    		enterNewPassword(userList, bankUser);
+			    		enterNewPassword(bankUser);
             			confirmEmailFrame.dispose();
 			    	} else {
 			    		JOptionPane.showMessageDialog(null,"Username or email is incorrect.");
-			    		new PasswordReset(userList);
+			    		new PasswordReset();
 			    		confirmEmailFrame.dispose();
 			    	}
 			    }
@@ -199,7 +197,7 @@ public class PasswordReset {
 		
 	}
 
-	public void enterNewPassword(UserNodes userList, BankUser bankUser) {
+	public void enterNewPassword(BankUser bankUser) {
 		
 		final JFrame passwordResetFrame = new JFrame();
         passwordResetFrame.setTitle("Silver Banking");
@@ -232,7 +230,7 @@ public class PasswordReset {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new PasswordReset(userList);
+            	new PasswordReset();
             	passwordResetFrame.dispose();
             }
         });
@@ -248,39 +246,12 @@ public class PasswordReset {
 				} else if(!(enterPassword.getText().equals(enterConfirmPassword.getText()))) {
 					JOptionPane.showMessageDialog(null,"Please enter matching passwords.");
 				} else {
-					Path dataPath = Paths.get("C:\\Users\\silve\\Desktop\\coding stuff\\brandon_clark_p0\\bankingApplication\\src\\com\\revature\\banking_application\\resources\\data.txt");
-					List<String> fileData;
-					
-					try { 
-						fileData = Files.readAllLines(dataPath);
-						File bankUserPersistance = new File("C:\\Users\\silve\\Desktop\\coding stuff\\brandon_clark_p0\\bankingApplication\\src\\com\\revature\\banking_application\\resources\\data.txt");
-						FileWriter fileErase= new FileWriter(bankUserPersistance, false);
-						fileErase.write("");
-						fileErase.flush();
-						fileErase.close();
-						FileWriter fileWriter = new FileWriter(bankUserPersistance, true);
-						for(int i=0;i<fileData.size();i++){
-							if(fileData.get(i).trim().isEmpty()) {
-							//System.out.println("empty line");
-							} else {
-								if(fileData.get(i).equals(bankUser.toFileString())) {
-									bankUser.setPassword(enterPassword.getText());
-									fileWriter.append(bankUser.toFileString() + "\n");
-								} else {
-									fileWriter.append(fileData.get(i) + "\n");
-								}
-					        }
-						} 
-						fileWriter.flush();
-						fileWriter.close();
-					} catch (IOException exception) {
-						exception.printStackTrace();
-					} finally {
-						JOptionPane.showMessageDialog(null,"Password has been reset.");
-						new HomePage(userList);
-						passwordResetFrame.dispose();
-						
-					}
+					bankUser.setPassword(enterPassword.getText());
+					DatabaseAccess.ChangePassword(bankUser);
+									
+					JOptionPane.showMessageDialog(null,"Password has been reset.");
+					new HomePage();
+					passwordResetFrame.dispose();
 				} 
             }
         });

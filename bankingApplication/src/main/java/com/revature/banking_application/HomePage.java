@@ -16,10 +16,12 @@ import javax.swing.border.Border;
 
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.models.UserNodes;
+import com.revature.banking_application.util.DatabaseAccess;
+import com.revature.banking_application.util.UserVerification;
 
 public class HomePage {
 	
-	public HomePage(UserNodes userList) {
+	public HomePage() {
 		
 		final JFrame loginFrame = new JFrame();
         loginFrame.setTitle("Silver Banking");
@@ -52,7 +54,7 @@ public class HomePage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new RegisterPage(userList);
+            	new RegisterPage();
             	loginFrame.dispose();
             }
         });
@@ -66,10 +68,10 @@ public class HomePage {
             	if (enterPassword.getText().trim().isEmpty() || 
 	            	enterUsername.getText().trim().isEmpty()) {
             		JOptionPane.showMessageDialog(null,"Please fill out all information fields.");
-            	} else if(userList.unusedUserName(enterUsername.getText().trim())) {
-            		BankUser returningUser = userList.returnBankUser(enterUsername.getText().trim());
+            	} else if(UserVerification.CheckExistingUsername(enterUsername.getText().trim())) {
+            		BankUser returningUser =  DatabaseAccess.PullUserFromUsername(enterUsername.getText().trim());
             		if(returningUser.getPassword().equals(enterPassword.getText())) {
-            			new UserPage(userList, returningUser);
+            			new UserPage(returningUser);
             			loginFrame.dispose();
             		} else {
                 		JOptionPane.showMessageDialog(null,"Username or email is incorrect.");
@@ -97,7 +99,7 @@ public class HomePage {
         passReset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	new PasswordReset(userList);
+            	new PasswordReset();
             	loginFrame.dispose();
             }
         });
