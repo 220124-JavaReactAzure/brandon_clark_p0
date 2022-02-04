@@ -5,24 +5,26 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.revature.banking_application.models.AccountNodes;
+import com.revature.banking_application.models.BankAccount;
 import com.revature.banking_application.models.BankUser;
 
 public class DatabaseAccess {
 	
-	public static String SearchUsername(String searchValue) {
+	public static int SearchUsername(String searchValue) {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		String returnValue = null;
+		int returnValue = 0;
 	
 		try {
 			conn = ConnectionFactory.getInstance().getConnection();
-			String sql = ("select * from userinfo where user_login_name = '"+searchValue+"'");
+			String sql = ("select * from userinfo where user_login_name = ?");
 			ps = conn.prepareStatement(sql);
-			//ps.setString(1, searchValue);
+			ps.setString(1, searchValue);
 			rs = ps.executeQuery();
 			while(rs.next()) {
-				returnValue = rs.getString("user_login_name");
+				returnValue = rs.getInt("user_id");
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -54,9 +56,9 @@ public class DatabaseAccess {
 	
 		try {
 			conn = ConnectionFactory.getInstance().getConnection();
-			String sql = ("select * from userinfo where user_email = '"+searchValue+"'");
+			String sql = ("select * from userinfo where user_email = ?");
 			ps = conn.prepareStatement(sql);
-			//ps.setString(1, searchValue);
+			ps.setString(1, searchValue);
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {
@@ -142,6 +144,7 @@ public class DatabaseAccess {
 			String city = "";
 			String state = "";
 			String zip = "";
+			int jointUser = 0;
  			while(rs.next()) {
 				if(rs.getString("user_social") != null) {
 					social = rs.getString("user_social");					 
@@ -158,6 +161,9 @@ public class DatabaseAccess {
 				if(rs.getString("user_zip_code") != null) {
 					zip = rs.getString("user_zip_code");
 				}
+				if(rs.getString("joint_user") != null) {
+					jointUser = rs.getInt("joint_user");
+				}
 				returnUser = new BankUser(rs.getInt("user_id"),
 										  rs.getString("user_login_name"), 
 										  rs.getString("user_first_name"),
@@ -168,7 +174,8 @@ public class DatabaseAccess {
 										  address,
 										  city,
 										  state,
-										  zip);
+										  zip,
+										  jointUser);
 											
 			}
 		} catch(SQLException e) {
@@ -254,6 +261,268 @@ public class DatabaseAccess {
 			ps.setString(7, updateUser.getState());
 			ps.setString(8, updateUser.getZipCode());
 			ps.setInt(9, updateUser.getUserID());
+			
+			int executed = ps.executeUpdate();
+			if(executed !=0) {
+				returnValue = true;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+		}
+		return returnValue;
+	}
+
+	public static Boolean CreateBankAccount(BankAccount newAccount) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean returnValue = false;
+	
+		try {
+			conn = ConnectionFactory.getInstance().getConnection();
+			String sql = ("insert into useraccount (user_id, user_account_type, user_account_nickname, user_account_value) values (?, ?, ?, ?)");
+			ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, newAccount.getUserID());
+			ps.setInt(2, newAccount.getUserAccountType());
+			ps.setString(3, newAccount.getAccountNickname());
+			ps.setDouble(4, newAccount.getAccountValue());
+			
+			int executed = ps.executeUpdate();
+			if(executed !=0) {
+				returnValue = true;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+		}
+		return returnValue;
+	}
+	
+	public static Boolean CreateJointBankAccount(BankAccount newAccount) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean returnValue = false;
+	
+		try {
+			conn = ConnectionFactory.getInstance().getConnection();
+			String sql = ("insert into useraccount (user_id, user_account_type, joint_account_id, user_account_nickname, user_account_value) values (?, ?, ?, ?, ?)");
+			ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, newAccount.getUserID());
+			ps.setInt(2, newAccount.getUserAccountType());
+			ps.setInt(3, newAccount.getJointUserID());
+			ps.setString(4, newAccount.getAccountNickname());
+			ps.setDouble(5, newAccount.getAccountValue());
+			
+			int executed = ps.executeUpdate();
+			if(executed !=0) {
+				returnValue = true;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+		}
+		return returnValue;
+	}
+	
+	public static AccountNodes PullBankAccountsFromBankUser(BankUser currentAccount) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		AccountNodes allAccounts = new AccountNodes();
+		
+		try {
+			conn = ConnectionFactory.getInstance().getConnection();
+			String sql = ("select * from useraccount where user_id = ? or joint_account_id = ?");
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, currentAccount.getUserID());
+			ps.setInt(2, currentAccount.getUserID());
+			rs = ps.executeQuery();
+			int jointUser = 0;
+			
+ 			while(rs.next()) {
+ 				
+ 				if(rs.getString("joint_account_id") != null) {
+					jointUser = rs.getInt("joint_account_id");
+				}
+ 				BankAccount anAccount = new BankAccount(rs.getInt("user_account_id"),
+										  	rs.getInt("user_id"), 
+										  	jointUser,
+										  	rs.getInt("user_account_type"),
+										  	rs.getString("user_account_nickname"),
+										  	rs.getDouble("user_account_value"));
+				if(anAccount != null) {
+					allAccounts.addNode(anAccount);	
+				}					  	
+											
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+		}
+		
+		
+		return allAccounts;
+	}
+
+	public static Boolean CheckifUserHasABankAccount(BankUser currentUser) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean returnValue = false;
+		
+		try {
+			conn = ConnectionFactory.getInstance().getConnection();
+			String sql = ("select * from useraccount where user_id = ? or joint_account_id = ?");
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, currentUser.getUserID());
+			ps.setInt(2, currentUser.getUserID());
+			rs = ps.executeQuery();
+			
+ 			while(rs.next()) {					  	
+				returnValue = true;				
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+		}
+		return returnValue;
+	}
+
+	public static Boolean updateJointAccounts(BankUser updateUser) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean returnValue = false;
+	
+		try {
+			conn = ConnectionFactory.getInstance().getConnection();
+			String sql = ("update userinfo set joint_user = ? where user_id = ?");
+			ps = conn.prepareStatement(sql);
+
+			
+			ps.setInt(1, updateUser.getJointUserID());
+			ps.setInt(2, updateUser.getUserID());
+			
+			int executed = ps.executeUpdate();
+			if(executed !=0) {
+				returnValue = true;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+		}
+		return returnValue;
+	}
+
+	public static Boolean updateBankAccount(BankAccount updateAccount) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean returnValue = false;
+	
+		try {
+			conn = ConnectionFactory.getInstance().getConnection();
+			String sql = ("update useraccount set user_account_nickname = ?, user_account_value = ? where user_account_id = ?");
+			ps = conn.prepareStatement(sql);
+
+			
+			ps.setString(1, updateAccount.getAccountNickname());
+			ps.setDouble(2, updateAccount.getAccountValue());
+			ps.setInt(3, updateAccount.getUserAccountID());
 			
 			int executed = ps.executeUpdate();
 			if(executed !=0) {

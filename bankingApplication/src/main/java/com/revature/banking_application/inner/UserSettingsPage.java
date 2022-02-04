@@ -69,7 +69,7 @@ public class UserSettingsPage {
         userSettingsFrame.setVisible(true);	
 	}
 	
-	public void ChangeUserInfoPage(BankUser currentUser) {
+	public static void ChangeUserInfoPage(BankUser currentUser) {
 		String[] stateComboBox = {
 				"  ", "AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC",  
 			    "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA",  
@@ -170,6 +170,7 @@ public class UserSettingsPage {
         JTextField enterZip = new JTextField(currentUser.getZipCode(), 20);
         enterZip.setBorder(null);
         gui.add(enterZip);
+        
         Button returnToUserSettingsPage = new Button("Return");
         gui.add(returnToUserSettingsPage);
         returnToUserSettingsPage.addActionListener(new ActionListener() {

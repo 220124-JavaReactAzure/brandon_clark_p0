@@ -4,11 +4,19 @@ import com.revature.banking_application.models.BankUser;
 
 public class UserVerification {
 	public static Boolean CheckExistingUsername(String userInput) {
-		String existingUser = DatabaseAccess.SearchUsername(userInput);
-		if(existingUser != null) {
+		int existingUser = DatabaseAccess.SearchUsername(userInput);
+		if(existingUser != 0) {
 			return true;
 		}
 		return false;
+	}
+	
+	public static int CheckExistingUsername(String userInput, BankUser currentUser) {
+		int existingUser = DatabaseAccess.SearchUsername(userInput);
+		if(existingUser == currentUser.getUserID()) {
+			return 0;
+		}
+		return existingUser;
 	}
 	
 	public static Boolean CheckExistingEmail(String userInput) {
@@ -49,10 +57,31 @@ public class UserVerification {
 	
 	public static Boolean CheckNumeric(String userInput) {
 		for(int i = 0; i<userInput.length(); i++) {
-			if(!(Character.isDigit(userInput.charAt(i)))){
+			if(!(Character.isDigit(userInput.charAt(i)) || userInput.charAt(i) != '.')){
 				return true;
 			}
 		}
 		return false;
 	}
+	
+	public static Boolean CheckAllValuesAreNotNull(BankUser currentUser) {
+		String blank = "";
+		if(currentUser.getAddress().equals(blank)) {
+			return true;
+		}
+		if(currentUser.getSocial().equals(blank)) {
+			return true;
+		}
+		if(currentUser.getState().equals(blank)) {
+			return true;
+		}
+		if(currentUser.getCity().equals(blank)) {
+			return true;
+		}
+		if(currentUser.getZipCode().equals(blank)) {
+			return true;
+		}
+		return false;
+	}
+	
 }

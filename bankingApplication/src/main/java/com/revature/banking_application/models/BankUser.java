@@ -2,7 +2,7 @@ package com.revature.banking_application.models;
 
 
 public class BankUser {
-	static UserNodes userList = new UserNodes();
+	static AccountNodes userList = new AccountNodes();
 	private int userID;
 	private String username;
 	private String firstName;
@@ -14,6 +14,7 @@ public class BankUser {
 	private String city;
 	private String state;
 	private String zipCode;
+	private int jointUserID;
 	
 	public BankUser() {
 		super();
@@ -39,7 +40,7 @@ public class BankUser {
 	}
 
 	public BankUser(int userID, String username, String firstName, String lastName, String email, String password, 
-			String social, String address, String city, String state, String zipCode) {
+			String social, String address, String city, String state, String zipCode, int jointUserID) {
 		super();
 		this.userID = userID;
 		this.username = username;
@@ -52,6 +53,7 @@ public class BankUser {
 		this.city = city;
 		this.state = state;
 		this.zipCode = zipCode;
+		this.jointUserID = jointUserID;
 	}
 
 	public String getUsername() {
@@ -136,6 +138,14 @@ public class BankUser {
 
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
+	}
+
+	public int getJointUserID() {
+		return jointUserID;
+	}
+
+	public void setJointUserID(int jointUserID) {
+		this.jointUserID = jointUserID;
 	}
 	
 	

@@ -34,7 +34,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new ViewAccountBalancePage();
+            	new ViewAccountBalancePage(currentUser);
             	mainUserFrame.dispose();
             }
         });
@@ -56,7 +56,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new RequestJointAccountPage();
+            	new RequestJointAccountPage(currentUser);
             	mainUserFrame.dispose();
             }
         });
@@ -67,7 +67,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new DepositFundsPage();
+            	new DepositFundsPage(currentUser);
             	mainUserFrame.dispose();
             }
         });
@@ -100,7 +100,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new CreateNewAccountPage();
+            	new CreateNewBankAccountPage(currentUser);
             	mainUserFrame.dispose();
             }
         });
