@@ -44,17 +44,15 @@ public class RequestJointAccountPage {
 			enterUsername.setBorder(null);
 			gui.add(enterUsername);
         
-			Button returnToUserSettingsPage = new Button("Return");
-			gui.add(returnToUserSettingsPage);
-			returnToUserSettingsPage.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-        	
-					new UserPage(currentUser);
-					jointAccountFrame.dispose();
-        	
-				}
-			});
+			Button returnToUserPage = new Button("Return");
+	        gui.add(returnToUserPage);
+	        returnToUserPage.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	            	new UserPage(currentUser);
+	            	jointAccountFrame.dispose();
+	            }
+	        });
     	
 			Button submit = new Button("Submit");
 			gui.add(submit);

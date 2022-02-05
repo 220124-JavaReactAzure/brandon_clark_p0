@@ -11,6 +11,14 @@ public class UserVerification {
 		return false;
 	}
 	
+	public static int CheckExistingUsernameReturnNumber(String userInput) {
+		int existingUser = DatabaseAccess.SearchUsername(userInput);
+		if(existingUser != 0) {
+			return existingUser;
+		}
+		return 0;
+	}
+	
 	public static int CheckExistingUsername(String userInput, BankUser currentUser) {
 		int existingUser = DatabaseAccess.SearchUsername(userInput);
 		if(existingUser == currentUser.getUserID()) {
@@ -57,8 +65,10 @@ public class UserVerification {
 	
 	public static Boolean CheckNumeric(String userInput) {
 		for(int i = 0; i<userInput.length(); i++) {
-			if(!(Character.isDigit(userInput.charAt(i)) || userInput.charAt(i) != '.')){
-				return true;
+			if(!(Character.isDigit(userInput.charAt(i)))){
+				if(userInput.charAt(i) != '.') {
+					return true;
+				}
 			}
 		}
 		return false;

@@ -4,6 +4,8 @@ import java.awt.Button;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -28,7 +30,7 @@ public class DepositFundsPage {
 			depositFundsFrame.setLocation(550, 400);
 		
 			JPanel gui = new JPanel(new GridLayout(0,5,25,10));
-			String title = "Account Balance";
+			String title = "Deposit Funds";
 			Border border = BorderFactory.createTitledBorder(title);
 			gui.setBorder(border);
 			
@@ -78,7 +80,7 @@ public class DepositFundsPage {
 		        accountName.setBorder(null);
 		        gui.add(accountName);
 		        
-		        JLabel balance = new JLabel(String.valueOf(currentAccount.getAccountValue()));
+		        JLabel balance = new JLabel(String.format("%.2f", currentAccount.getAccountValue()));
 		        gui.add(balance);
 		        
 		        JTextField amountToDeposit = new JTextField(null, 20);
@@ -97,6 +99,9 @@ public class DepositFundsPage {
 						}else {
 							currentAccount.setAccountValue(currentAccount.getAccountValue() + Double.parseDouble(amountToDeposit.getText()));
 							currentAccount.setAccountNickname(accountName.getText().trim());
+							Date utilDate = new Date();
+							java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+							DatabaseAccess.UpdateTransactionList(currentAccount.getUserID(), Double.parseDouble(amountToDeposit.getText()), sqlDate);
 							DatabaseAccess.updateBankAccount(currentAccount);
 							JOptionPane.showMessageDialog(null,"Deposit complete.");
 							new DepositFundsPage(currentUser);
@@ -118,17 +123,15 @@ public class DepositFundsPage {
 	        JLabel blank2 = new JLabel("");
 	        gui.add(blank2);
 			
-			Button returnToUserSettingsPage = new Button("Return");
-			gui.add(returnToUserSettingsPage);
-			returnToUserSettingsPage.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-            	
-					new UserSettingsPage(currentUser);
-					depositFundsFrame.dispose();
-            	
-				}
-			});	
+	        Button returnToUserPage = new Button("Return");
+	        gui.add(returnToUserPage);
+	        returnToUserPage.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	            	new UserPage(currentUser);
+	            	depositFundsFrame.dispose();
+	            }
+	        });	
 			
 			depositFundsFrame.add(gui);
 			depositFundsFrame.pack();

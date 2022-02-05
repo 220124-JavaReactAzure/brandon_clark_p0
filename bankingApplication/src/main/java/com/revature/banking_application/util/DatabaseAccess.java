@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import com.revature.banking_application.models.AccountNodes;
 import com.revature.banking_application.models.BankAccount;
 import com.revature.banking_application.models.BankUser;
+import com.revature.banking_application.models.Transaction;
+import com.revature.banking_application.models.TransactionNodes;
 
 public class DatabaseAccess {
 	
@@ -427,6 +430,61 @@ public class DatabaseAccess {
 		
 		return allAccounts;
 	}
+	
+	public static AccountNodes PullBankAccountsFromBankUser(int checkID) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		AccountNodes allAccounts = new AccountNodes();
+		
+		try {
+			conn = ConnectionFactory.getInstance().getConnection();
+			String sql = ("select * from useraccount where user_id = ? or joint_account_id = ?");
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, checkID);
+			ps.setInt(2, checkID);
+			rs = ps.executeQuery();
+			int jointUser = 0;
+			
+ 			while(rs.next()) {
+ 				
+ 				if(rs.getString("joint_account_id") != null) {
+					jointUser = rs.getInt("joint_account_id");
+				}
+ 				BankAccount anAccount = new BankAccount(rs.getInt("user_account_id"),
+										  	rs.getInt("user_id"), 
+										  	jointUser,
+										  	rs.getInt("user_account_type"),
+										  	rs.getString("user_account_nickname"),
+										  	rs.getDouble("user_account_value"));
+				if(anAccount != null) {
+					allAccounts.addNode(anAccount);	
+				}					  	
+											
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+		}
+		
+		
+		return allAccounts;
+	}
 
 	public static Boolean CheckifUserHasABankAccount(BankUser currentUser) {
 		Connection conn = null;
@@ -440,6 +498,45 @@ public class DatabaseAccess {
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, currentUser.getUserID());
 			ps.setInt(2, currentUser.getUserID());
+			rs = ps.executeQuery();
+			
+ 			while(rs.next()) {					  	
+				returnValue = true;				
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+		}
+		return returnValue;
+	}
+	
+	public static Boolean CheckifUserHasABankAccount(int checkID) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean returnValue = false;
+		
+		try {
+			conn = ConnectionFactory.getInstance().getConnection();
+			String sql = ("select * from useraccount where user_id = ? or joint_account_id = ?");
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, checkID);
+			ps.setInt(2, checkID);
 			rs = ps.executeQuery();
 			
  			while(rs.next()) {					  	
@@ -548,6 +645,94 @@ public class DatabaseAccess {
 			}
 		}
 		return returnValue;
+	}
+
+	public static Boolean UpdateTransactionList(int accountID, Double transactionAmount, java.sql.Date date) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean returnValue = false;
+	
+		try {
+			conn = ConnectionFactory.getInstance().getConnection();
+			String sql = ("insert into transactions (user_account_id, transaction_value, transaction_date) values (?, ?, ?)");
+			ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, accountID);
+			ps.setDouble(2, transactionAmount);
+			ps.setDate(3, date);
+			
+			int executed = ps.executeUpdate();
+			if(executed !=0) {
+				returnValue = true;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+		}
+		return returnValue;
+	}
+
+	public static TransactionNodes ReturnAllTransactions(BankUser currentUser) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		TransactionNodes allTransaction = new TransactionNodes();
+		
+		try {
+			conn = ConnectionFactory.getInstance().getConnection();
+			String sql = ("select * from transactions natural join useraccount where user_id = ?");
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, currentUser.getUserID());
+			rs = ps.executeQuery();
+			
+ 			while(rs.next()) {
+ 				
+ 				Transaction transaction = new Transaction(rs.getDouble("transaction_value"),
+										  	rs.getDate("transaction_date"));
+				if(transaction != null) {
+					allTransaction.addNode(transaction);	
+				}					  	
+											
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { /* Ignored */}
+			}
+		}
+		
+		
+		return allTransaction;
+		
 	}
 }
 

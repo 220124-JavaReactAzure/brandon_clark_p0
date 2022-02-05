@@ -69,7 +69,7 @@ public class ViewAccountBalancePage {
 		        JLabel accountName = new JLabel(currentAccount.getAccountNickname());
 		        gui.add(accountName);
 		        
-		        JLabel balance = new JLabel(String.valueOf(currentAccount.getAccountValue()));
+		        JLabel balance = new JLabel(String.format("%.2f", currentAccount.getAccountValue()));
 		        gui.add(balance);
 		        
 		        current = current.getNext();
@@ -80,17 +80,15 @@ public class ViewAccountBalancePage {
 			JLabel blank = new JLabel("");
 	        gui.add(blank);
 			
-			Button returnToUserSettingsPage = new Button("Return");
-			gui.add(returnToUserSettingsPage);
-			returnToUserSettingsPage.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-            	
-					new UserSettingsPage(currentUser);
-					viewBalanceFrame.dispose();
-            	
-				}
-			});	
+	        Button returnToUserPage = new Button("Return");
+	        gui.add(returnToUserPage);
+	        returnToUserPage.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	            	new UserPage(currentUser);
+	            	viewBalanceFrame.dispose();
+	            }
+	        });	
 			
 			viewBalanceFrame.add(gui);
 			viewBalanceFrame.pack();

@@ -45,7 +45,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new ViewTransactionsPage();
+            	new ViewTransactionsPage(currentUser);
             	mainUserFrame.dispose();
             }
         });
@@ -78,7 +78,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new WithdrawFundsPage();
+            	new WithdrawFundsPage(currentUser);
             	mainUserFrame.dispose();
             }
         });
@@ -89,7 +89,7 @@ public class UserPage {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-            	new TransferFundsPage();
+            	new TransferFundsPage(currentUser);
             	mainUserFrame.dispose();
             }
         });
