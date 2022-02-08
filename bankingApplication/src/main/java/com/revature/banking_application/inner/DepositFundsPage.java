@@ -4,7 +4,6 @@ import java.awt.Button;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
@@ -20,9 +19,14 @@ import com.revature.banking_application.models.BankAccount;
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.util.DatabaseAccess;
 import com.revature.banking_application.util.UserVerification;
+import com.revature.banking_application.util.logging.Logger;
 
 public class DepositFundsPage {
+	
+	private static Logger logger;
+	
 	public DepositFundsPage(BankUser currentUser) {
+		logger = Logger.getLogger(true);
 		if(DatabaseAccess.CheckifUserHasABankAccount(currentUser)) {
 			final JFrame depositFundsFrame = new JFrame();
 			depositFundsFrame.setTitle("Silver Banking");
@@ -101,6 +105,7 @@ public class DepositFundsPage {
 							currentAccount.setAccountNickname(accountName.getText().trim());
 							Date utilDate = new Date();
 							java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+							logger.log("Funds Deposited");
 							DatabaseAccess.UpdateTransactionList(currentAccount.getUserID(), Double.parseDouble(amountToDeposit.getText()), sqlDate);
 							DatabaseAccess.updateBankAccount(currentAccount);
 							JOptionPane.showMessageDialog(null,"Deposit complete.");

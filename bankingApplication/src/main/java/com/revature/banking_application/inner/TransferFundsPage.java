@@ -19,9 +19,14 @@ import com.revature.banking_application.models.BankAccount;
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.util.DatabaseAccess;
 import com.revature.banking_application.util.UserVerification;
+import com.revature.banking_application.util.logging.Logger;
 
 public class TransferFundsPage {
+	
+	private static Logger logger;
+	
 	public TransferFundsPage(BankUser currentUser) {
+		logger = Logger.getLogger(true);
 		if(DatabaseAccess.CheckifUserHasABankAccount(currentUser)) {
 			final JFrame transferFundsFrame = new JFrame();
 			transferFundsFrame.setTitle("Silver Banking");
@@ -110,6 +115,7 @@ public class TransferFundsPage {
 								currentAccount.setAccountNickname(accountName.getText().trim());
 								Date utilDate = new Date();
 								java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+								logger.log("Found User For Transfer");
 								DatabaseAccess.UpdateTransactionList(currentAccount.getUserID(), -(Double.parseDouble(amountToTransfer.getText())), sqlDate);
 								DatabaseAccess.updateBankAccount(currentAccount);
 								TransferToAccount(transferieID, Double.parseDouble(amountToTransfer.getText()), currentUser);
@@ -151,7 +157,7 @@ public class TransferFundsPage {
 	}
 
 	public void TransferToAccount(int transferieID, double amountTransfered, BankUser currentUser) {
-		System.out.println("?");
+		logger = Logger.getLogger(true);
 		final JFrame transferFundsToAccountFrame = new JFrame();
 		transferFundsToAccountFrame.setTitle("Silver Banking");
 		transferFundsToAccountFrame.setSize(500, 500);
@@ -215,6 +221,7 @@ public class TransferFundsPage {
 						currentAccount2.setAccountValue(currentAccount2.getAccountValue() + amountTransfered);
 						Date utilDate = new Date();
 						java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+						logger.log("Transfer Complete");
 						DatabaseAccess.UpdateTransactionList(currentAccount2.getUserID(), amountTransfered , sqlDate);
 						DatabaseAccess.updateBankAccount(currentAccount2);
 						JOptionPane.showMessageDialog(null,"Transfer complete.");

@@ -19,9 +19,14 @@ import com.revature.banking_application.models.BankAccount;
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.util.DatabaseAccess;
 import com.revature.banking_application.util.UserVerification;
+import com.revature.banking_application.util.logging.Logger;
 
 public class WithdrawFundsPage {
+	
+	private static Logger logger;
+	
 	public WithdrawFundsPage(BankUser currentUser) {
+		logger = Logger.getLogger(true);
 		if(DatabaseAccess.CheckifUserHasABankAccount(currentUser)) {
 			final JFrame withdrawFundsFrame = new JFrame();
 			withdrawFundsFrame.setTitle("Silver Banking");
@@ -104,6 +109,7 @@ public class WithdrawFundsPage {
 							java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
 							DatabaseAccess.UpdateTransactionList(currentAccount.getUserID(), -(Double.parseDouble(amountToWithdraw.getText())), sqlDate);
 							DatabaseAccess.updateBankAccount(currentAccount);
+							logger.log("Funds Withdrawn");
 							JOptionPane.showMessageDialog(null,"Withdraw complete.");
 							new WithdrawFundsPage(currentUser);
 							withdrawFundsFrame.dispose();

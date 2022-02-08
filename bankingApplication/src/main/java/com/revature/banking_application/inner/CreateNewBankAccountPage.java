@@ -18,9 +18,14 @@ import com.revature.banking_application.models.BankAccount;
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.util.DatabaseAccess;
 import com.revature.banking_application.util.UserVerification;
+import com.revature.banking_application.util.logging.Logger;
 
 public class CreateNewBankAccountPage {
+	
+	private static Logger logger;
+	
 	public CreateNewBankAccountPage(BankUser currentUser){
+		logger = Logger.getLogger(true);
 		if(UserVerification.CheckAllValuesAreNotNull(currentUser)) {
 			JOptionPane.showMessageDialog(null,"Additional user information required for bank account creation. Redirecting...");
 			UserSettingsPage.ChangeUserInfoPage(currentUser);
@@ -67,6 +72,7 @@ public class CreateNewBankAccountPage {
 	            		if(!(singleAccountBox.getItemAt(singleAccountBox.getSelectedIndex()).equals(""))) {
 	            			BankAccount newBankAccount = new BankAccount(currentUser.getUserID(), singleAccountBox.getSelectedIndex(), singleAccountBox.getItemAt(singleAccountBox.getSelectedIndex()), 0.00);
 	            			DatabaseAccess.CreateBankAccount(newBankAccount);
+	            			logger.log("New Bank Account Created");
 	            			JOptionPane.showMessageDialog(null,"Account created.");
 	            			new UserPage(currentUser);
 							createNewBankAccountFrame.dispose();
@@ -118,6 +124,7 @@ public class CreateNewBankAccountPage {
 	            		if(!(jointAccountBox.getItemAt(jointAccountBox.getSelectedIndex()).equals(""))) {
 	            			BankAccount newBankAccount = new BankAccount(currentUser.getUserID(), currentUser.getJointUserID(), jointAccountBox.getSelectedIndex(), jointAccountBox.getItemAt(jointAccountBox.getSelectedIndex()), 0.00);
 	            			DatabaseAccess.CreateJointBankAccount(newBankAccount);
+	            			logger.log("New Bank Account Created");
 	            			JOptionPane.showMessageDialog(null,"Account created.");
 	            			new UserPage(currentUser);
 							createNewBankAccountFrame.dispose();

@@ -12,8 +12,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import com.revature.banking_application.models.AccountNodes;
-import com.revature.banking_application.models.BankAccount;
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.models.Transaction;
 import com.revature.banking_application.models.TransactionNodes;

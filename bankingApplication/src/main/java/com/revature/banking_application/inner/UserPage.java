@@ -12,11 +12,14 @@ import javax.swing.border.Border;
 
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.outer.HomePage;
+import com.revature.banking_application.util.logging.Logger;
 
 public class UserPage {
 	
+	private static Logger logger;
+	
 	public UserPage(BankUser currentUser) {
-		
+		logger = Logger.getLogger(true);
 		final JFrame mainUserFrame = new JFrame();
         mainUserFrame.setTitle("Silver Banking");
         mainUserFrame.setSize(500, 500);
@@ -121,7 +124,7 @@ public class UserPage {
         logOut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	
+            	logger.log("Logging Out Of Account");
             	new HomePage();
             	mainUserFrame.dispose();
             }

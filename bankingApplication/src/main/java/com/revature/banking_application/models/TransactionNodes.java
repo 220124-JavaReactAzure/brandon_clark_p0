@@ -1,7 +1,5 @@
 package com.revature.banking_application.models;
 
-import com.revature.banking_application.models.AccountNodes.Node;
-
 public class TransactionNodes {
 	public class Node{
 		Transaction data;

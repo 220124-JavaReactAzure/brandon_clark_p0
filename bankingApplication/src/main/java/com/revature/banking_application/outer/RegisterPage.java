@@ -16,10 +16,14 @@ import javax.swing.border.Border;
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.util.DatabaseAccess;
 import com.revature.banking_application.util.UserVerification;
+import com.revature.banking_application.util.logging.Logger;
 
 public class RegisterPage {
+	
+	private static Logger logger;
+	
 		public RegisterPage() {
-			
+			logger = Logger.getLogger(true);
 			final JFrame registrationFrame = new JFrame();
 	        registrationFrame.setTitle("Silver Banking");
 	        registrationFrame.setSize(500, 500);
@@ -130,6 +134,7 @@ public class RegisterPage {
 															enterEmail.getText().trim(),
 															enterPassword.getText());
 						DatabaseAccess.CreateUser(newBankUser);
+						logger.log("Account Created");
 	            		EmailVerification(enterEmail.getText());
 	            		registrationFrame.dispose();
 	            	}

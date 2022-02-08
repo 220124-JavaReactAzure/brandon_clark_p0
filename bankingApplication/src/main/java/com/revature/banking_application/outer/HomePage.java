@@ -18,10 +18,14 @@ import com.revature.banking_application.inner.UserPage;
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.util.DatabaseAccess;
 import com.revature.banking_application.util.UserVerification;
+import com.revature.banking_application.util.logging.Logger;
 
 public class HomePage {
 	
+	private static Logger logger;
+	
 	public HomePage() {
+		logger = Logger.getLogger(true);
 		
 		final JFrame loginFrame = new JFrame();
         loginFrame.setTitle("Silver Banking");
@@ -71,6 +75,7 @@ public class HomePage {
             	} else if(UserVerification.CheckExistingUsername(enterUsername.getText().trim())) {
             		BankUser returningUser =  DatabaseAccess.PullUserFromUsername(enterUsername.getText().trim());
             		if(returningUser.getPassword().equals(enterPassword.getText())) {
+            			logger.log("User Verified");
             			new UserPage(returningUser);
             			loginFrame.dispose();
             		} else {
@@ -90,6 +95,7 @@ public class HomePage {
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	logger.log("Application Closed");
             	loginFrame.dispose();
             }
         });

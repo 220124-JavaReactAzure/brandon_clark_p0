@@ -16,9 +16,14 @@ import javax.swing.border.Border;
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.util.DatabaseAccess;
 import com.revature.banking_application.util.UserVerification;
+import com.revature.banking_application.util.logging.Logger;
 
 public class RequestJointAccountPage {
+	
+	private static Logger logger;
+	
 	public RequestJointAccountPage(BankUser currentUser) {
+		logger = Logger.getLogger(true);
 		if(currentUser.getJointUserID() != 0) {
 			JOptionPane.showMessageDialog(null,"You cannot have multiple joint users yet. Sorry for the inconvenience. Redirecting...");
 			new UserPage(currentUser);
@@ -68,6 +73,7 @@ public class RequestJointAccountPage {
 						} else {
 							currentUser.setJointUserID(jointID);
 							DatabaseAccess.updateJointAccounts(currentUser);
+							logger.log("Account Now Has Joint Access");
 							JOptionPane.showMessageDialog(null,"Joint account created.");
 							new UserPage(currentUser);
 							jointAccountFrame.dispose();

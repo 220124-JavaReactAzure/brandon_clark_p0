@@ -17,10 +17,13 @@ import javax.swing.border.Border;
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.util.DatabaseAccess;
 import com.revature.banking_application.util.UserVerification;
+import com.revature.banking_application.util.logging.Logger;
 
 public class PasswordReset {
+	
+	private static Logger logger;
+	
 	public PasswordReset() {
-		
 		final JFrame verifyUsernameFrame = new JFrame();
         verifyUsernameFrame.setTitle("Silver Banking");
         verifyUsernameFrame.setSize(500, 500);
@@ -78,6 +81,8 @@ public class PasswordReset {
 	}
 	
 	public void notValidUser() {
+		logger = Logger.getLogger(true);
+		
 		final JFrame invalidUserFrame = new JFrame();
         invalidUserFrame.setTitle("Silver Banking");
         invalidUserFrame.setSize(500, 500);
@@ -118,6 +123,7 @@ public class PasswordReset {
 					JOptionPane.showMessageDialog(null,"Please make sure the email address is valid.");
 				} else {
 			    	JOptionPane.showMessageDialog(null,"Username or email is incorrect.");
+			    	logger.log("Incorrect Username");
 			    	new PasswordReset();
 			    	invalidUserFrame.dispose();
 			    }
@@ -130,6 +136,7 @@ public class PasswordReset {
 	}
 	
 	public void confirmEmail(BankUser bankUser) {
+		logger = Logger.getLogger(true);
 		
 		final JFrame confirmEmailFrame = new JFrame();
         confirmEmailFrame.setTitle("Silver Banking");
@@ -175,6 +182,7 @@ public class PasswordReset {
             			confirmEmailFrame.dispose();
 			    	} else {
 			    		JOptionPane.showMessageDialog(null,"Username or email is incorrect.");
+			    		logger.log("Incorrect Email");
 			    		new PasswordReset();
 			    		confirmEmailFrame.dispose();
 			    	}
@@ -190,6 +198,7 @@ public class PasswordReset {
 	}
 
 	public void enterNewPassword(BankUser bankUser) {
+		logger = Logger.getLogger(true);
 		
 		final JFrame passwordResetFrame = new JFrame();
         passwordResetFrame.setTitle("Silver Banking");
@@ -240,7 +249,7 @@ public class PasswordReset {
 				} else {
 					bankUser.setPassword(enterPassword.getText());
 					DatabaseAccess.ChangePassword(bankUser);
-									
+					logger.log(bankUser.getFirstName()+ " " + bankUser.getLastName() + "'s Password Has Been Changed");				
 					JOptionPane.showMessageDialog(null,"Password has been reset.");
 					new HomePage();
 					passwordResetFrame.dispose();

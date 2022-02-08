@@ -19,8 +19,12 @@ import javax.swing.border.Border;
 import com.revature.banking_application.models.BankUser;
 import com.revature.banking_application.util.DatabaseAccess;
 import com.revature.banking_application.util.UserVerification;
+import com.revature.banking_application.util.logging.Logger;
 
 public class UserSettingsPage {
+	
+	private static Logger logger;
+	
 	public UserSettingsPage(BankUser currentUser) {
 		
 		final JFrame userSettingsFrame = new JFrame();
@@ -70,6 +74,7 @@ public class UserSettingsPage {
 	}
 	
 	public static void ChangeUserInfoPage(BankUser currentUser) {
+		logger = Logger.getLogger(true);
 		String[] stateComboBox = {
 				"  ", "AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC",  
 			    "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA",  
@@ -258,6 +263,7 @@ public class UserSettingsPage {
 						currentUser.setZipCode(enterZip.getText());
 					
 						DatabaseAccess.UpdateUser(currentUser);
+						logger.log(currentUser.getFirstName()+ " " + currentUser.getLastName() + "'s User Information Has Been Changed");
 						JOptionPane.showMessageDialog(null,"Account information updated.");
 						new UserSettingsPage(currentUser);
 		            	userInfoChangeFrame.dispose();
@@ -274,6 +280,8 @@ public class UserSettingsPage {
 	}
 
 	public void ChangePasswordPage(BankUser currentUser) {
+		logger = Logger.getLogger(true);
+		
 		final JFrame passwordChangeFrame = new JFrame();
         passwordChangeFrame.setTitle("Silver Banking");
         passwordChangeFrame.setSize(500, 500);
@@ -337,7 +345,7 @@ public class UserSettingsPage {
 				} else {
 					currentUser.setPassword(enterNewPassword.getText());
 					DatabaseAccess.ChangePassword(currentUser);
-									
+					logger.log(currentUser.getFirstName()+ " " + currentUser.getLastName() + "'s Password Has Been Changed");				
 					JOptionPane.showMessageDialog(null,"Password has been changed.");
 					new UserSettingsPage(currentUser);
 					passwordChangeFrame.dispose();
